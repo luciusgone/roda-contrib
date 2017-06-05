@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'roda'
 require 'roda/contrib'
 
 RSpec.configure do |config|
