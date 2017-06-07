@@ -137,8 +137,8 @@ module RodaContrib
 
         def represent_err(errs, options={})
           t = options.delete(:title) || 'model field validation failed'
-          s = options.delete[:status] || 400
-          e = if errs.resond_to? :full_messages
+          s = options.delete(:status) || 400
+          e = if errs.respond_to? :full_messages
                 errs.full_messages.map { |err| SerializableError.new(title: t, err: err, status: s) }
               else
                 [SerializableError.new(title: t, err: errs, status: s)]
