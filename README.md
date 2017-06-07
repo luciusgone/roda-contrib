@@ -21,11 +21,12 @@ Or install it yourself as:
 
 ## Usage
 
-Currently, the roda-contrib gem ships 3 plugins:
+Currently, the roda-contrib gem ships 4 plugins:
 
 * load\_all
 * multi\_dispatch
 * csrf
+* json\_api
 
 When loading plugins from this gem, you should append the 'contrib' to the
 symbol to load it. For example, if you want to use the multi\_dispatch plugin:

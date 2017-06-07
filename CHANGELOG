@@ -1,3 +1,6 @@
+= 0.3.0(2017-6-7)
+  * add json_api plugin
+
 = 0.2.0(2017-6-6)
   * add load_all plugin
   * add multi_dispatch plugin

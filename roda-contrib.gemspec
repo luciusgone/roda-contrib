@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yard'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'rack_csrf'
+  spec.add_development_dependency 'rack-parser'
+  spec.add_development_dependency 'jsonapi-rb'
 
   spec.add_dependency 'roda', '~> 2.0'
 end

@@ -1,0 +1,6 @@
+= 0.3.0 release note
+
+== New Feature
+
+* add _contrib_json_api_ plugin.
+  This plugin offers intergration with the jsonapi-rb gem
