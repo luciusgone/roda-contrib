@@ -1,10 +1,11 @@
 module RodaContrib
   module Plugins
-    # This plugin helps to write clean code loading related parts of the main
-    # Roda app.
+    # the load_all plugin helps to write clean code loading related parts of
+    # the main roda app.
     #
-    # It favors the +:root+ option of the roda app. If you set the :root option
-    # before you load this plugin, you can omit the :root option of the plugin.
+    # It favors the +:root+ option of the roda app. If you set the +:root+
+    # option before you load this plugin, you can omit the +:root+ option of
+    # the plugin.
     #
     # Besides, you can load multiple directories at the same time, if loading
     # order does not matter.
@@ -13,7 +14,9 @@ module RodaContrib
     #   class App < Roda
     #     plugin :contrib_load_all, root: __dir__
     #
+    #     # load multiple resources at the same time
     #     load_all :models, :views
+    #     # load only one folder
     #     load_all :helpers
     #   end
     #

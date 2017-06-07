@@ -1,8 +1,8 @@
 module RodaContrib
   module Action
-    # basic functionalities for +RodaContrib::Action+ mixin
+    # Basic functionalities for +RodaContrib::Action+ mixin
     #
-    # the call method is already taken by the roda app, so we have to introduce
+    # The call method is already taken by the roda app, so we have to introduce
     # a new method finish to actually executing the route block.
     module Dispatchable
       def self.included(base)

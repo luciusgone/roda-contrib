@@ -1,0 +1,6 @@
+--no-cache
+--no-save
+--output-dir www
+lib/**/*.rb
+-
+LICENSE.txt

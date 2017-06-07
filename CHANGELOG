@@ -1,0 +1,8 @@
+= 0.2.0(2017-6-6)
+  * add load_all plugin
+  * add multi_dispatch plugin
+  * add csrf plugin
+  * add CHANGELOG
+
+= 0.1.0(2017-6-5)
+  * initial commit

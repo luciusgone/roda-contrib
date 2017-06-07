@@ -2,7 +2,7 @@ require 'forwardable'
 require 'roda/contrib/action/dispatchable'
 
 module RodaContrib
-  # the mixin is intended to use with the multi_dispatch plugin. It ships with
+  # The mixin is intended to use with the multi_dispatch plugin. It ships with
   # Dispatchable module by default. Currently, it will load all modules defined
   # under the RodaContrib::Action module
   #

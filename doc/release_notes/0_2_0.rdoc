@@ -1,0 +1,19 @@
+= 0.2.0 release note
+
+== New Features
+
+* add _contrib_load_all_ plugin.
+  This plugin helps writing clean code requiring different part of the roda
+  app.
+
+* add _contrib_multi_dispatch_ plugin.
+  This plugin helps seperating different logics by delegating request to an
+  external object.
+
+* add _contrib_csrf_ plugin.
+  Apart from the official csrf plugin, It exposes only one interface to make
+  the main roda app a bit clean.
+
+* add RodaContrib::Action
+  This mixin is the main way for roda-contrib to package plugable business
+  logic.

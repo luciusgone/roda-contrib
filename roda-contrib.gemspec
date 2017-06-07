@@ -14,8 +14,10 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/luciusgone/roda-contrib'
   spec.license       = 'MIT'
 
+  spec.required_ruby_version = ">= 2.3.1"
+
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features|bin)/})
+    f.match(%r{^(test|spec|features|bin|www)/})
   end
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
@@ -24,8 +26,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'yard'
   spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'rack_csrf'
 
-  spec.add_dependency 'roda'
+  spec.add_dependency 'roda', '~> 2.0'
 end
