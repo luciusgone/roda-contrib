@@ -1,0 +1,5 @@
+= 0.3.1 release note
+
+== Improvements
+
+* fix represent_err method of _contrib_json_api_ plugin
