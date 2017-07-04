@@ -87,7 +87,7 @@ module RodaContrib
       DEFAULT_JSON_PARSER      = proc { |data| JSON.parse(data) }
 
       DEFAULT_ERROR_HANDLER    = proc { |err, type|
-        e = [SerializableError.new(title: 'invalid JSON doc', err: err, status: 400)]
+        e = SerializableError.create(title: 'Invalid JSON Doc Error', detail: err.message, status: 400)
         msg = JSONAPI::Serializable::ErrorRenderer.render(e, {})
         [400, { CONTENT_TYPE => JSONAPI_MEDIA_TYPE }, [msg]]
       }
@@ -98,9 +98,24 @@ module RodaContrib
       }.freeze
 
       class SerializableError < JSONAPI::Serializable::Error
+        def self.create(rc)
+          [new(rc)]
+        end
+
         title { @title }
         status { @status }
-        detail { @err.is_a?(Exception) ? @err.message : @err }
+        detail { @detail }
+      end
+
+      class SerializableValidationError < JSONAPI::Serializable::Error
+        def self.create(rc)
+          rc.errors.full_messages.each_with_object([]) do |msg, errs|
+            errs << new(title: 'Validation Error', detail: msg)
+          end
+        end
+
+        title { @title }
+        detail { @detail }
       end
 
       def self.configure(app, opts={})
@@ -135,14 +150,13 @@ module RodaContrib
           request.halt
         end
 
-        def represent_err(errs, options={})
-          t = options.delete(:title) || 'model field validation failed'
+        def represent_err(rc, options={})
+          if rc.respond_to? :errors
+            e = SerializableValidationError.create(rc)
+          else
+            e = SerializableError.create(rc)
+          end
           s = options.delete(:status) || 400
-          e = if errs.respond_to? :full_messages
-                errs.full_messages.map { |err| SerializableError.new(title: t, err: err, status: s) }
-              else
-                [SerializableError.new(title: t, err: errs, status: s)]
-              end
           rendered = JSONAPI::Serializable::ErrorRenderer.render(e, options)
 
           response.status = s
@@ -161,8 +175,8 @@ module RodaContrib
           begin
             result = klass.call(rc)
           rescue JSONAPI::Parser::InvalidDocument => e
-            errs = [SerializableError.new(title: 'Invalid JSONAPI doc', error: e, status: 400)]
-            rendered = JSONAPI::Serializable::ErrorRenderer.render(errs, {})
+            err = SerializableError.create(title: 'Invalid JSONAPI Doc Error', detail: e.message, status: 400)
+            rendered = JSONAPI::Serializable::ErrorRenderer.render(err, {})
 
             response.status = 400
             response[CONTENT_TYPE] = JSONAPI_MEDIA_TYPE

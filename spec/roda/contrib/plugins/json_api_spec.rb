@@ -16,10 +16,13 @@ describe RodaContrib::Plugins::JsonApi do
   before do
     jsonapi_app.route do |r|
       product = Class.new(Object) do
-        attr_accessor :id, :name, :description, :slug
+        attr_accessor :id, :name, :description, :slug, :errors
 
         def initialize(id, name, desc, slug)
           @id, @name, @description, @slug = id, name, desc, slug
+          error_class = Class.new { attr_accessor :full_messages }
+          @errors = error_class.new
+          @errors.full_messages = ['somthing went wrong']
         end
       end
       serializable_pd = Class.new(JSONAPI::Serializable::Resource) do
@@ -38,20 +41,34 @@ describe RodaContrib::Plugins::JsonApi do
         represent pd, with: serializable_pd
       end
 
-      err_full_msg = Class.new(Object) do
-        def full_messages
-          ['an error msg', 'another error msg']
-        end
+      r.get 'err' do
+        pd = product.new(1, 'pen', 'a pen to use', 'pen')
+        represent_err pd
       end
 
-      r.get 'err' do
-        err = err_full_msg.new
-        represent_err err_full_msg
+      r.get 'except' do
+        begin
+          1 / 0
+        rescue ZeroDivisionError => e
+          represent_err(title: 'Zero Division Error', detail: e.message)
+        end
       end
     end
   end
 
   after { jsonapi_app = nil }
+
+  it 'should render the exceptions well' do
+    get '/except'
+    expect(last_response.body).to match /\{\"errors\"\:\[/
+    expect(last_response.body).to match /\"title\"\:\"Zero Division Error\"/
+  end
+
+  it 'should render model validation error well' do
+    get '/err'
+    expect(last_response.body).to match /\{\"errors\"\:\[/
+    expect(last_response.body).to match /\"title\"\:\"Validation Error\"/
+  end
 
   it 'should return correct response rendering resources' do
     get '/pd'
@@ -95,7 +112,7 @@ describe RodaContrib::Plugins::JsonApi do
       post '/pd'
 
       expect(last_response.status).to eql 400
-      expect(last_response.body).to match /invalid\ JSON\ doc/
+      expect(last_response.body).to match /Invalid\ JSON\ Doc\ Error/
     end
 
     it 'should bail out the application if the JSON API doc is not comformant' do
@@ -104,7 +121,7 @@ describe RodaContrib::Plugins::JsonApi do
       post '/pd'
 
       expect(last_response.status).to eql 400
-      expect(last_response.body).to match /\"title\"\:\"Invalid\ JSONAPI\ doc\"/
+      expect(last_response.body).to match /\"title\"\:\"Invalid\ JSONAPI\ Doc\ Error\"/
     end
   end
 end
