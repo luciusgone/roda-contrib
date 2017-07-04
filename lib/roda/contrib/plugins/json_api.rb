@@ -38,11 +38,11 @@ module RodaContrib
     # the +represent+ method is used for rendering the resources
     #   represent rc, with: SerializableRc
     #
-    # the +represent_err+ method is used for rendering the errors, if you don't
-    # offer a title, 'model field validation error' will be used as title. the
-    # status is default to 400.
+    # the +represent_err+ method is used for rendering the errors. The status
+    # is default to 400, if you don't offer one. You can rednering model
+    # objects or hash.
     #
-    #   represent rc.errors, title: 'gateway not reachable', status: 500
+    #   represent rc, status: 500
     #
     # the +json_params+ method is used to get the parsed data from the request
     # body.
